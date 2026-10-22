@@ -1,6 +1,45 @@
 package servlets;
 
-public class Servlet {
+import java.io.IOException;
+import java.io.PrintWriter;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@WebServlet(name = "GeneracionServletExcel", urlPatterns = {"/GeneracionServletExcel"})
+public class GeneracionExcelServlet extends HttpServlet {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment;filename=excelEjemplo.xls");
+        // Utilizar apache poi para un uso más profesional de excel
+
+        response.setHeader("Pragma", "no-cache"); // Esto es para que no guarde el caché de la respuesta que generaremos
+        response.setHeader("Cache-Control", "no-store");
+        response.setDateHeader("Expires", -1);
+
+        try (PrintWriter out = response.getWriter()) {
+            out.println("\tValores");
+            out.println("\t1");
+            out.println("\t2");
+            out.println("Total\t=SUM(B2:B3)"); // Esto depende del idioma de las funciones
+
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
 
 }
 
@@ -35,7 +74,7 @@ response.setHeader                                      (String nombreCabecero, 
 setDateHeader y setIntHeader                            estos ponen unn cabecero, si ya existe lo reemplaza
 response.addHeader, addDateHeader y addIntHeader        Estos agregan nuevos valores en lugar de reemplazarlos
 
-Metodos mas comunes para establecer los valores de los headers:
+Metodos más comunes para establecer los valores de los headers:
 
 setContentType (se utiliza la tabla MIME para definir su valor)
 setContentLength
